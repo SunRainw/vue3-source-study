@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module">
+    // import {
+    //   reactive,
+    //   effect
+    // } from "/node_modules/@vue/reactivity/dist/reactivity.esm-browser.js"
+
+    import {
+      reactive
+    } from "./dist/reactivity.esm.js"
+    const obj = reactive({
+      name: '张三',
+      age: 18
+    });
+    const obj2 = reactive(obj);
+    console.log(obj2);
+    // effect(() => {
+    //   document.getElementById('app').innerHTML = `name: ${obj.name}, age: ${obj.age}`;
+    // });
+    // obj.name = '李四';
+    // obj.age++;
+  </script>
+</body>
+
+</html>
