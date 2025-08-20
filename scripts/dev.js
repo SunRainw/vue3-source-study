@@ -18,8 +18,6 @@ const format = args.f || "iife"; // 打包后的模块化规范
 const entry = resolve(__dirname, `../packages/${target}/src/index.ts`);
 const pkg = require(`../packages/${target}/package.json`);
 
-console.log(entry);
-
 esbuild.context({
   entryPoints: [entry], // 入口
   outfile: resolve(__dirname, `../packages/${target}/dist/${target}.${format}.js`), // 出口
@@ -29,7 +27,7 @@ esbuild.context({
   format, // cjs esm iife
   globalName: pkg.buildOptions?.name, // 全局变量名, iife需要
 }).then(ctx => {
-  ctx.watch();
+  ctx.watch(); 
   ctx.serve({
     port: 3000,
     host: '0.0.0.0',

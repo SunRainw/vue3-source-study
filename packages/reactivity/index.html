@@ -12,22 +12,83 @@
   <script type="module">
     // import {
     //   reactive,
-    //   effect
+    //   effect,
+    //   computed
     // } from "/node_modules/@vue/reactivity/dist/reactivity.esm-browser.js"
 
     import {
-      reactive
+      reactive,
+      effect,
+      ref,
+      toRefs,
+      computed,
+      watch
     } from "./dist/reactivity.esm.js"
     const obj = reactive({
       name: '张三',
-      age: 18
+      flag: true,
+      age: 18,
+      address: {
+        n: 1
+      }
     });
-    const obj2 = reactive(obj);
-    console.log(obj2);
+    const c = ref(false)
+    watch(() => obj.name, (newVal, oldVal) => {
+      console.log(newVal);
+      console.log(oldVal);
+    })
+    // watch(obj, (newVal, oldVal) => {
+    //   console.log(newVal);
+    //   console.log(oldVal);
+    // }, {deep: 3})
+    setTimeout(() => {
+      obj.name = '李四';
+      obj.address.n = 1
+      c.value = true
+    }, 2000);
+    // const str = reactive({
+    //   a: "1",
+    //   b: "12"
+    // })
+    // const strCom = computed(() => {
+    //   return str.a + str.b;
+    // })
+    // const fullName = computed(() => {
+    //   console.log('computed')
+    //   return obj.name + ' ' + obj.age;
+    // })
     // effect(() => {
-    //   document.getElementById('app').innerHTML = `name: ${obj.name}, age: ${obj.age}`;
+    //   console.log(strCom.value);
+    //   console.log(strCom.value);
+    // })
+    // effect(() => {
+    //   console.log(fullName.value);
+    //   console.log(fullName.value);
+    //   console.log(fullName.value);
+    //   console.log(fullName.value);
+    //   console.log(fullName.value);
+    // })
+    // setTimeout(() => {
+    //   obj.name = '李四';
+    //   str.a = "11"
+    //   str.b = "2"
+    // }, 2000);
+    // const {name, age} = toRefs(obj);
+    // console.log(name, age)
+    // const flag = ref(true);
+    // const obj2 = reactive(obj);
+    // console.log(obj2);
+    // effect(() => {
+    //   console.info(flag.value)
+    //   document.getElementById('app').innerHTML = flag.value ? obj.name + obj.name : obj.age
     // });
+    // setTimeout(() => {
+    //   // debugger
+    //   console.info('setTimeout')
+    //   flag.value = false;
+    // }, 2000);
     // obj.name = '李四';
+    // obj.age++;
     // obj.age++;
   </script>
 </body>
