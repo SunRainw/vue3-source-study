@@ -33,16 +33,37 @@
       }
     });
     const c = ref(false)
-    watch(() => obj.name, (newVal, oldVal) => {
-      console.log(newVal);
-      console.log(oldVal);
+    // watch(() => obj.name, (newVal, oldVal) => {
+    //   console.log(newVal);
+    //   console.log(oldVal);
+    // })
+    const getData = (timer) => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(timer)
+        }, timer)
+      })
+    }
+    let timer = 3000;
+    watch(() => obj.name, async (newVal, oldVal, onCleanup) => {
+      let flag = true;
+      onCleanup(() => {
+        flag = false
+      })
+      timer -= 1000;
+      const res = await getData(timer)
+      if (flag) {
+        console.log(res)
+      }
     })
+
     // watch(obj, (newVal, oldVal) => {
     //   console.log(newVal);
     //   console.log(oldVal);
     // }, {deep: 3})
     setTimeout(() => {
       obj.name = '李四';
+      obj.name = '王五';
       obj.address.n = 1
       c.value = true
     }, 2000);

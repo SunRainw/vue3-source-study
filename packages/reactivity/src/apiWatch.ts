@@ -22,7 +22,7 @@ const traverse = (source, depth, currentDepth = 0, seen = new Set()) => {
   return source;
 };
 
-function doWatch(source, cb, { deep, immediate } = {}) {
+function doWatch(source, cb, { deep, immediate }) {
   // 将 source 转换为 getter
   const reactiveGetter = (source) => traverse(source, !deep ? 1 : deep);
 
@@ -37,18 +37,32 @@ function doWatch(source, cb, { deep, immediate } = {}) {
   }
 
   let oldValue;
+  let clean;
+  const onCleanup = (fn) => {
+    // 实际是利用闭包，将fn保存起来，下一次执行时，之前的内容变化，从而实现阻止上一次的操作
+    clean = () => {
+      fn();
+      clean = undefined;
+    };
+  };
   const job = () => {
     if (cb) {
       const newValue = effect.run();
-      cb(newValue, oldValue);
+      if (clean) {
+        // 将上一次的结果清理掉，再做新的监听
+        clean();
+      }
+      cb(newValue, oldValue, onCleanup);
       oldValue = newValue;
-    } else { // watchEffect
+    } else {
+      // watchEffect
       effect.run();
     }
   };
   const effect = new ReactiveEffect(getter, job);
   if (cb) {
-    if (immediate) { // 先执行一次用户的回调，传递新值和老值
+    if (immediate) {
+      // 先执行一次用户的回调，传递新值和老值
       job();
     } else {
       oldValue = effect.run();
@@ -56,8 +70,11 @@ function doWatch(source, cb, { deep, immediate } = {}) {
   } else {
     effect.run();
   }
+  // 停止监听
+  const unwatch = () => effect.stop();
+  return unwatch;
 }
 
-export function watchEffect(getter, options = {}) {
+export function watchEffect(getter, options = {} as any) {
   return doWatch(getter, null, options);
 }
