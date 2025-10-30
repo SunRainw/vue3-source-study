@@ -9,3 +9,5 @@ export function isFunction(val: any) {
 export function isString(val: any) {
   return typeof val === "string";
 }
+
+export * from "./shapeFlags";
