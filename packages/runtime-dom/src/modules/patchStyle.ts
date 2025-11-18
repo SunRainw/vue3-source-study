@@ -5,7 +5,7 @@ export function patchStyle(el, prevValue, nextValue) {
   }
   if (prevValue) {
     for (let key in prevValue) {
-      if (nextValue[key] === undefined) {
+      if (nextValue && nextValue[key] === undefined) {
         // 判断以前的属性有没有，没有就删除
         style[key] = null;
       }
